@@ -9,6 +9,7 @@ from gradysim.protocol.messages.telemetry import Telemetry
 from gradysim.simulator.handler.visualization import VisualizationController
 from messages.simple_message import SimpleMessage
 from messages.simple_message import NodeType
+from gradysim.simulator.handler.communication import CommunicationController
 
 class UavProtocol(IProtocol):
 
@@ -28,6 +29,8 @@ class UavProtocol(IProtocol):
         self.packets = []
         self.visited_sensors = []
         self._controller = VisualizationController()
+        self._com_controller = CommunicationController()
+        self._com_controller.set_node_configuration(self.provider.get_id(), 0.15, 0)
         self.provider.schedule_timer("paint node", self.provider.current_time() + 5)
 
         logging.info(f"Node ID: {self.provider.get_id()}")
@@ -55,7 +58,7 @@ class UavProtocol(IProtocol):
             self.visited_sensors.pop(0)
         if timer == "paint node":
             self._controller.paint_node(self.provider.get_id(), (0,255,0));
-            self._controller.show_node_id(self.provider.get_id(), True);
+    
 
     def handle_packet(self, message: str):
         parsed_message: SimpleMessage = json.loads(message)

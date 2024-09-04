@@ -33,7 +33,8 @@ def main():
     builder.add_node(UavProtocol, (0,-5,20))
     
     medium = CommunicationMedium(
-        transmission_range=30
+        transmission_range=30,
+        failure_rate=0.1,
     )
 
     builder.add_handler(TimerHandler())
